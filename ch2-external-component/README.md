@@ -8,6 +8,7 @@
 - DatePicker
 - Bar
 - Pie
+- CheckBox
 
 ### Calendar
 
@@ -241,6 +242,60 @@ export default function App() {
   return (
     <View style={styles.container}>
       <EXPie />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+```
+
+### CheckBox
+
+- `npx expo install expo-checkbox`
+- todo의 완료 여부를 나타내는데 사용할 예정
+
+### CheckBox 예제 코드
+
+```jsx
+import Checkbox from "expo-checkbox";
+import { useState } from "react";
+import { Text, View } from "react-native";
+
+function EXCheckBox() {
+  const [isComplete, setIsComplete] = useState(false);
+  return (
+    <View>
+      <Checkbox
+        value={isComplete}
+        onValueChange={() => setIsComplete(!isComplete)}
+      />
+      <Text>{isComplete ? "true" : "false"}</Text>
+    </View>
+  );
+}
+
+export default EXCheckBox;
+```
+
+```jsx
+import { StyleSheet, View } from "react-native";
+import EXCalendar from "./components/EXCalendar";
+import EXDateTimePicker from "./components/EXDateTimePicker";
+import EXBar from "./components/EXBar";
+import EXPie from "./components/EXPie";
+import EXCheckBox from "./components/EXCheckBox";
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <EXCheckBox />
     </View>
   );
 }
