@@ -3,11 +3,12 @@ import EXCalendar from "./components/EXCalendar";
 import EXDateTimePicker from "./components/EXDateTimePicker";
 import EXBar from "./components/EXBar";
 import EXPie from "./components/EXPie";
+import EXCheckBox from "./components/EXCheckBox";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EXPie />
+      <EXCheckBox />
     </View>
   );
 }
