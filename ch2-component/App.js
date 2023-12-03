@@ -3,11 +3,12 @@ import EXText from "./components/EXText";
 import EXPressable from "./components/EXPressable";
 import EXButton from "./components/EXButton";
 import EXIcon from "./components/EXIcon";
+import EXFlatList from "./components/EXFlatList";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EXIcon />
+      <EXFlatList />
     </View>
   );
 }
