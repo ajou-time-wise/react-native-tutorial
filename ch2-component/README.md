@@ -4,6 +4,15 @@
 
 ## React Native Component
 
+### Components List
+
+- View
+- Text
+- Pressable
+- Button
+- Ionicons
+- FlatList
+
 ### View
 
 - UI를 구축하기 위한 가장 기본적인 구성요소인 컨테이너 역할
