@@ -1,10 +1,11 @@
 import { StyleSheet, View } from "react-native";
 import EXCalendar from "./components/EXCalendar";
+import EXDateTimePicker from "./components/EXDateTimePicker";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EXCalendar />
+      <EXDateTimePicker />
     </View>
   );
 }
