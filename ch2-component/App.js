@@ -5,8 +5,9 @@ import EXText from "./components/EXText";
 export default function App() {
   return (
     <View style={styles.container}>
-      {/* <EXView /> */}
-      <EXText />
+      <EXView />
+      <EXView />
+      <EXView />
     </View>
   );
 }
@@ -14,5 +15,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "green",
   },
 });
