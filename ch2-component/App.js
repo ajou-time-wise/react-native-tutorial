@@ -1,13 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import EXView from "./components/EXView";
 import EXText from "./components/EXText";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EXView />
-      <EXView />
-      <EXView />
+      <EXText />
     </View>
   );
 }
