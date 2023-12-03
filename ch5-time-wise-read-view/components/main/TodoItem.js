@@ -5,7 +5,7 @@ import IconButton from "../../components/IconButton";
 function TodoItem({ todo }) {
   return (
     <View style={styles.container}>
-      <Checkbox value={todo.isComplete} onValueChange={() => {}} />
+      <Checkbox value={todo.isChecked} onValueChange={() => {}} />
       <Text>{todo.todo}</Text>
       <Text>
         {todo.spendTime.getHours() + "H" + todo.spendTime.getMinutes() + "M"}

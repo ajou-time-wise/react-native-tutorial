@@ -1,22 +1,7 @@
 import { View, FlatList, Text, StyleSheet } from "react-native";
 import TodoItem from "./TodoItem";
-import Todos from "../../data/Todo";
-import { useEffect, useState } from "react";
 
-function TodoList({ selectedDate }) {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    const filteredTodos = Todos.filter((todo) => {
-      return (
-        todo.date.getFullYear() === selectedDate.getFullYear() &&
-        todo.date.getMonth() === selectedDate.getMonth() &&
-        todo.date.getDate() === selectedDate.getDate()
-      );
-    });
-    setTodos(filteredTodos);
-  }, [selectedDate]);
-
+function TodoList({ todos, selectedDate }) {
   const renderItem = ({ item }) => {
     return <TodoItem todo={item} selectedDate={selectedDate} />;
   };
