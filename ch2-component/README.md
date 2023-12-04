@@ -1,17 +1,8 @@
 # 📁 React Native Componet
 
-> 앞으로 제작할 Time Wise에서 사용될 주요 React Native내장 컴포넌트를 알아보고자 한다.
+> 앞으로 제작할 Time Wise에서 사용될 주요 React Native내장 컴포넌트와 외부 라이브러리를 설치하여 사용할 컴포넌트를 알아보고자 한다.
 
 ## React Native Component
-
-### Components List
-
-- View
-- Text
-- Pressable
-- Button
-- Ionicons
-- FlatList
 
 ### View
 
@@ -110,6 +101,66 @@ export default function App() {
   return (
     <View style={styles.container}>
       <EXText />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "green",
+  },
+});
+```
+
+### TextInput
+
+- 입력값을 받을 때 사용
+
+### TextInput 예시
+
+```jsx
+import { useState } from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
+function EXTextInput() {
+  const [text, setText] = useState("");
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.textInput} value={text} onChangeText={setText} />
+      <Text>{text}</Text>
+    </View>
+  );
+}
+
+export default EXTextInput;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: 300,
+    justifyContent: "center",
+  },
+  textInput: {
+    borderWidth: 1,
+  },
+});
+```
+
+```jsx
+import { StyleSheet, View } from "react-native";
+import EXText from "./components/EXText";
+import EXPressable from "./components/EXPressable";
+import EXButton from "./components/EXButton";
+import EXIcon from "./components/EXIcon";
+import EXFlatList from "./components/EXFlatList";
+import EXTextInput from "./components/EXTextInput";
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <EXTextInput />
     </View>
   );
 }

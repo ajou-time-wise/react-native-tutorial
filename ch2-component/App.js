@@ -4,11 +4,12 @@ import EXPressable from "./components/EXPressable";
 import EXButton from "./components/EXButton";
 import EXIcon from "./components/EXIcon";
 import EXFlatList from "./components/EXFlatList";
+import EXTextInput from "./components/EXTextInput";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <EXFlatList />
+      <EXTextInput />
     </View>
   );
 }
