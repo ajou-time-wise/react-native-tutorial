@@ -1,4 +1,4 @@
-# 📁 External Component
+# 📁 External Components
 
 > 앞으로 제작할 Time Wise 어플리케이션에서 사용될 외부 라이브러리 컴포넌트를 알아보고자 한다.
 
@@ -6,8 +6,6 @@
 
 - Calendar
 - DatePicker
-- Bar
-- Pie
 - CheckBox
 
 ### Calendar
@@ -78,7 +76,6 @@ import { Pressable, StyleSheet, View, Text } from "react-native";
 
 function EXDateTimePicker() {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(new Date());
 
   const showDatePicker = () => {
     DateTimePickerAndroid.open({
@@ -88,19 +85,6 @@ function EXDateTimePicker() {
         setSelectedDate(currentDate);
       },
       mode: "date",
-      is24Hour: true,
-    });
-  };
-
-  const showTimePicker = () => {
-    DateTimePickerAndroid.open({
-      value: selectedDate,
-      onChange: (event, selectTime) => {
-        const currentTime = selectTime || selectedTime;
-        setSelectedTime(currentTime);
-      },
-      mode: "time",
-      is24Hour: true,
     });
   };
 
@@ -114,9 +98,6 @@ function EXDateTimePicker() {
             " " +
             selectedDate.getDate()}
         </Text>
-      </Pressable>
-      <Pressable onPress={showTimePicker}>
-        <Text>{selectedTime.getHours() + " " + selectedTime.getMinutes()}</Text>
       </Pressable>
     </View>
   );
@@ -133,6 +114,12 @@ const styles = StyleSheet.create({
 });
 ```
 
+- `selectedDate` datePicker에서 선택한 날짜를 담을 상태변수
+- `showDatePicker` DateTimePickerAndroid객체의 open함수를 통해 DatePicker를 띄우는 함수
+  - value : 초기값 설정
+  - onChange : 날짜를 선택했을 때 호출할 함수 설정
+  - mode : Date, Time 모드 설정
+
 ```jsx
 import { StyleSheet, View } from "react-native";
 import EXCalendar from "./components/EXCalendar";
@@ -142,106 +129,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       <EXDateTimePicker />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
-```
-
-### Bar
-
-- 프로그레스 바
-- React Native 내장 컴포넌트가 아니기 때문에 라이브러리 설치
-- `npm install react-native-progress --save`
-- todo 의 진행률을 나타낼 때 사용할 예정
-- 주요 프로퍼티
-  - `progress` : 진행률을 나타내는 값 (100%가 1)
-  - `width` : 너비 설정
-  - `height` : 높이 설정
-  - `color` : 색상 설정
-
-### Bar 예시 코드
-
-```jsx
-import { View } from "react-native";
-import { Bar } from "react-native-progress";
-
-function EXBar() {
-  return (
-    <View>
-      <Bar progress={0.5} width={200} height={10} color="blue" />
-    </View>
-  );
-}
-
-export default EXBar;
-```
-
-```jsx
-import { StyleSheet, View } from "react-native";
-import EXCalendar from "./components/EXCalendar";
-import EXDateTimePicker from "./components/EXDateTimePicker";
-import EXBar from "./components/EXBar";
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <EXBar />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
-```
-
-### Pie
-
-- 원형 그래프
-- `npm install react-native-progress --save`
-- 주요 프로퍼티
-  - `progress` : 진행률
-  - `size` : 원형 그래프의 크기
-  - `color` : 원형 그래프의 색상
-- 24시간 중 사용된 시간 비율 나타내기 위한 원형 그래프로 사용할 예정
-
-### Pie 예시 코드
-
-```jsx
-import { Pie } from "react-native-progress";
-
-function EXPie(props) {
-  return <Pie progress={0.5} size={100} color="blue" />;
-}
-
-export default EXPie;
-```
-
-```jsx
-import { StyleSheet, View } from "react-native";
-import EXCalendar from "./components/EXCalendar";
-import EXDateTimePicker from "./components/EXDateTimePicker";
-import EXBar from "./components/EXBar";
-import EXPie from "./components/EXPie";
-
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <EXPie />
     </View>
   );
 }

@@ -4,7 +4,6 @@ import { Pressable, StyleSheet, View, Text } from "react-native";
 
 function EXDateTimePicker() {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState(new Date());
 
   const showDatePicker = () => {
     DateTimePickerAndroid.open({
@@ -14,19 +13,6 @@ function EXDateTimePicker() {
         setSelectedDate(currentDate);
       },
       mode: "date",
-      is24Hour: true,
-    });
-  };
-
-  const showTimePicker = () => {
-    DateTimePickerAndroid.open({
-      value: selectedDate,
-      onChange: (event, selectTime) => {
-        const currentTime = selectTime || selectedTime;
-        setSelectedTime(currentTime);
-      },
-      mode: "time",
-      is24Hour: true,
     });
   };
 
@@ -40,9 +26,6 @@ function EXDateTimePicker() {
             " " +
             selectedDate.getDate()}
         </Text>
-      </Pressable>
-      <Pressable onPress={showTimePicker}>
-        <Text>{selectedTime.getHours() + " " + selectedTime.getMinutes()}</Text>
       </Pressable>
     </View>
   );
