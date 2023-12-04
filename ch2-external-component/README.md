@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 ### DateTimePickerAndroid
 
 - 안드로이드 환경에서 날짜와 시간을 입력할 수 있는 폼 제공
-- `npm install --save react-native-calendars`
+- `npm install @react-native-community/datetimepicker --save`
 - `npx expo install --fix`
   - expo 버전 호환 문제 시 해당 명령어 입력
 - DateTimePickerAndroid 객체를 사용해서 날짜, 시간 선택 폼 open
