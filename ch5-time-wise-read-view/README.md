@@ -14,70 +14,60 @@ const Todos = [
     date: new Date(2023, 11, 9),
     isChecked: true,
     todo: "todo1",
-    spendTime: new Date(0, 0, 0, 1, 0, 0, 0),
   },
   {
     id: "2",
     date: new Date(2023, 11, 10),
     isChecked: false,
     todo: "todo2",
-    spendTime: new Date(0, 0, 0, 2, 0, 0, 0),
   },
   {
     id: "3",
     date: new Date(2023, 11, 10),
     isChecked: true,
     todo: "todo3",
-    spendTime: new Date(0, 0, 0, 1, 0, 0, 0),
   },
   {
     id: "4",
     date: new Date(2023, 11, 10),
     isChecked: true,
     todo: "todo4",
-    spendTime: new Date(0, 0, 0, 0, 30, 0, 0),
   },
   {
     id: "5",
     date: new Date(2023, 11, 10),
     isChecked: true,
     todo: "todo5",
-    spendTime: new Date(0, 0, 0, 1, 0, 0, 0),
   },
   {
     id: "6",
     date: new Date(2023, 11, 11),
     isChecked: false,
     todo: "todo6",
-    spendTime: new Date(0, 0, 0, 1, 0, 0, 0),
   },
   {
     id: "7",
     date: new Date(2023, 11, 11),
     isChecked: true,
     todo: "todo7",
-    spendTime: new Date(0, 0, 0, 1, 0, 0, 0),
   },
   {
     id: "8",
     date: new Date(2023, 11, 12),
     isChecked: false,
     todo: "todo8",
-    spendTime: new Date(0, 0, 0, 5, 0, 0, 0),
   },
   {
     id: "9",
     date: new Date(2023, 11, 12),
     isChecked: false,
     todo: "todo9",
-    spendTime: new Date(0, 0, 0, 2, 0, 0, 0),
   },
   {
     id: "10",
     date: new Date(2023, 11, 12),
     isChecked: false,
     todo: "todo1",
-    spendTime: new Date(0, 0, 0, 1, 0, 0, 0),
   },
 ];
 
@@ -125,6 +115,7 @@ export default MiniCalendar;
 
 - `onDayPress` 날짜를 클릭했을 때 정의된 이벤트 실행
   - 해당 프로젝트에서는 날짜를 클릭했을 때 selectedDate 상태를 변화
+  - selectedDate 상태값을 변경하는 setSelectedDate 함수를 prop으로 넘겨받음
 
 ### Main.js
 
@@ -151,7 +142,12 @@ const styles = StyleSheet.create({
 });
 ```
 
-- `selectedDate` 캘린더에서 선택한 날짜를 담는 상태값
+- `selectedDate` 캘린더에서 선택한 날짜를 담는 상태 값
+- flex
+  - 부모 컨테이너 내에서 자식 요소의 크기를 상대적인 비율로 나타내는데 사용
+  - 부모 컨테이너 안에 자식 요소가 2개가 있고 자식 요소의 flex 값이 2이면 다른 자식 요소보다 2배의 공간을 차지
+  - 1로 설정하여 부모 요소 안에서 자식 컴포넌트 끼리 균등한 공간 배분을 한다.
+  - 여기에서는 부모 요소가 화면이기 때문에 View는 화면 크기에 맞춰 배치
 
 ## TodoList
 
@@ -193,6 +189,13 @@ const styles = StyleSheet.create({
 });
 ```
 
+- FlatList
+  - data 프로퍼티에 todos를 넘겨받아 todo 항목을 목록으로 띄움
+  - renderItem 각 todo를 renderItem 함수로 컴포넌트로 변환
+  - KeyExtractor item은 todo와 같고 todo의 id를 키 값으로 설정
+- renderItem
+  - todo를 TodoItem 컴포넌트로 변환하여 return
+
 ### TodoItem.js
 
 ```jsx
@@ -205,9 +208,6 @@ function TodoItem({ todo }) {
     <View style={styles.container}>
       <Checkbox value={todo.isChecked} onValueChange={() => {}} />
       <Text>{todo.todo}</Text>
-      <Text>
-        {todo.spendTime.getHours() + "H" + todo.spendTime.getMinutes() + "M"}
-      </Text>
       <IconButton icon="close" size={20} color="grey" onPress={() => {}} />
     </View>
   );
@@ -228,6 +228,12 @@ const styles = StyleSheet.create({
 ```
 
 - `FlatList` 의 rendering Component
+  - todo의 완료 여부 isChecked
+  - todo의 title
+- style
+  - flexDirection : 정렬축이 가로
+  - justifyContent: 정렬축으로 어떻게 자식 컴포넌트를 배치할지 결정
+    - 해당 코드에서는 자식 요소들 사이에 공간을 균등하게 분배
 
 ### MainView.js
 
@@ -236,7 +242,6 @@ import { View, StyleSheet } from "react-native";
 import MiniCalendar from "../components/main/MiniCalendar";
 import { useState, useEffect } from "react";
 import TodoList from "../components/main/TodoList";
-import ProgressBar from "../components/main/ProgressBar";
 import Todos from "../data/Todo";
 
 function MainView() {
@@ -257,7 +262,6 @@ function MainView() {
   return (
     <View style={styles.container}>
       <MiniCalendar setSeletedDate={setSeletedDate} />
-      <ProgressBar progress={0.5} />
       <TodoList selectedDate={selectedDate} todos={todos} />
     </View>
   );
@@ -274,86 +278,3 @@ const styles = StyleSheet.create({
 
 - `useEffect`
   - `selectedDate` 의 상태가 변할 때마다 선택된 날짜의 Todos를 필터링한다.
-
-## Progress
-
-### ProgressBar.js
-
-```jsx
-import { StyleSheet, Text, View } from "react-native";
-import { Bar } from "react-native-progress";
-
-function ProgressBar({ progress }) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Progress</Text>
-      <Bar progress={progress} color="blue" width={300} height={10} />
-    </View>
-  );
-}
-
-export default ProgressBar;
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 5,
-  },
-  text: {
-    margin: 5,
-  },
-});
-```
-
-### MainView.js
-
-```jsx
-import { View, Text, StyleSheet } from "react-native";
-import MiniCalendar from "../components/main/MiniCalendar";
-import { useState, useEffect } from "react";
-import TodoList from "../components/main/TodoList";
-import ProgressBar from "../components/main/ProgressBar";
-import Todos from "../data/Todo";
-
-function MainView() {
-  const [selectedDate, setSeletedDate] = useState(new Date());
-  const [todos, setTodos] = useState([]);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const filteredTodos = Todos.filter((todo) => {
-      return (
-        todo.date.getFullYear() === selectedDate.getFullYear() &&
-        todo.date.getMonth() === selectedDate.getMonth() &&
-        todo.date.getDate() === selectedDate.getDate()
-      );
-    });
-    setTodos(filteredTodos);
-    const totalTodos = filteredTodos.length;
-    const completedTodos = filteredTodos.filter(
-      (todo) => todo.isChecked
-    ).length;
-    const calculatedProgress = totalTodos > 0 ? completedTodos / totalTodos : 0;
-    setProgress(calculatedProgress);
-  }, [selectedDate]);
-
-  return (
-    <View style={styles.container}>
-      <MiniCalendar setSeletedDate={setSeletedDate} />
-      <ProgressBar progress={progress} />
-      <TodoList selectedDate={selectedDate} todos={todos} />
-    </View>
-  );
-}
-
-export default MainView;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-```
-
-- `useEffect` 에서 `selectedDate` 의 상태값이 변할 때마다 `filteredTodos` 의 진행률을 구한다.

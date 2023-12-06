@@ -7,9 +7,6 @@ function TodoItem({ todo }) {
     <View style={styles.container}>
       <Checkbox value={todo.isChecked} onValueChange={() => {}} />
       <Text>{todo.todo}</Text>
-      <Text>
-        {todo.spendTime.getHours() + "H" + todo.spendTime.getMinutes() + "M"}
-      </Text>
       <IconButton icon="close" size={20} color="grey" onPress={() => {}} />
     </View>
   );
