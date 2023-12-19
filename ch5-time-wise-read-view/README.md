@@ -83,11 +83,6 @@ module.exports = Todos;
 - `npm install --save react-native-calendars`
 - 캘린더의 날짜를 클릭했을 때 해당 날짜의 todo 조회
 
-### react-native-progress
-
-- `npm install react-native-progress --save`
-- Todo의 진행률을 표현
-
 ### expo-checkbox
 
 - `npx expo install expo-checkbox`
