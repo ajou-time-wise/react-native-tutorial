@@ -1,275 +1,221 @@
-# ⌚ Time Wise Todo 조회 화면 구현
+# ⌚TimeWise Todo 생성 화면 구현
 
-> 이번 챕터에서는 Time Wise의 Todo 리스트를 확인할 수 있는 화면을 구현할 예정이다.
-> 사전 준비 : Time Wise Navigation 프로젝트 및 튜토리얼 영상 시청
-
-## Todo 더미 데이터
-
-### Todo.js
-
-```json
-const Todos = [
-  {
-    id: "1",
-    date: new Date(2023, 11, 9),
-    isChecked: true,
-    todo: "todo1",
-  },
-  {
-    id: "2",
-    date: new Date(2023, 11, 10),
-    isChecked: false,
-    todo: "todo2",
-  },
-  {
-    id: "3",
-    date: new Date(2023, 11, 10),
-    isChecked: true,
-    todo: "todo3",
-  },
-  {
-    id: "4",
-    date: new Date(2023, 11, 10),
-    isChecked: true,
-    todo: "todo4",
-  },
-  {
-    id: "5",
-    date: new Date(2023, 11, 10),
-    isChecked: true,
-    todo: "todo5",
-  },
-  {
-    id: "6",
-    date: new Date(2023, 11, 11),
-    isChecked: false,
-    todo: "todo6",
-  },
-  {
-    id: "7",
-    date: new Date(2023, 11, 11),
-    isChecked: true,
-    todo: "todo7",
-  },
-  {
-    id: "8",
-    date: new Date(2023, 11, 12),
-    isChecked: false,
-    todo: "todo8",
-  },
-  {
-    id: "9",
-    date: new Date(2023, 11, 12),
-    isChecked: false,
-    todo: "todo9",
-  },
-  {
-    id: "10",
-    date: new Date(2023, 11, 12),
-    isChecked: false,
-    todo: "todo1",
-  },
-];
-
-module.exports = Todos;
-```
-
-- 해당 더미 데이터로 Todo 리스트를 구현할 예정
+> 이번 시간에는 Time Wise Todo 생성 화면을 구현할 예정이다.
+> 사전 준비: Software Tool Time 튜토리얼 1~6편 시청
 
 ## 필요한 외부 라이브러리
 
-### react-native-calendars
+### Community/datetimepicker
 
-- `npm install --save react-native-calendars`
-- 캘린더의 날짜를 클릭했을 때 해당 날짜의 todo 조회
+- `npm install @react-native-community/datetimepicker --save`
+- `npx expo install --fix`
+- todo 날짜를 생성할 때 사용할 예정
 
-### expo-checkbox
+## Todo 생성화면
 
-- `npx expo install expo-checkbox`
-- Todo 체크박스
-
-## MiniClanedar
-
-### MiniCalendar.js
+### DatePicker.js
 
 ```jsx
-import { Calendar } from "react-native-calendars";
-
-function MiniCalendar({ setSeletedDate }) {
-  return (
-    <Calendar
-      onDayPress={(day) => {
-        setSeletedDate(new Date(day.dateString));
-      }}
-    />
-  );
-}
-
-export default MiniCalendar;
-```
-
-- `onDayPress` 날짜를 클릭했을 때 정의된 이벤트 실행
-  - 해당 프로젝트에서는 날짜를 클릭했을 때 selectedDate 상태를 변화
-  - selectedDate 상태값을 변경하는 setSelectedDate 함수를 prop으로 넘겨받음
-
-### Main.js
-
-```jsx
-import { View, Text, StyleSheet } from "react-native";
-import MiniCalendar from "../components/main/MiniCalendar";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { useState } from "react";
+import { Pressable, StyleSheet, View, Text } from "react-native";
 
-function MainView() {
-  const [selectedDate, setSeletedDate] = useState(new Date());
+function DatePicker({ selectedDate, setSelectedDate }) {
+  const showDatePicker = () => {
+    DateTimePickerAndroid.open({
+      value: selectedDate,
+      onChange: (event, selectDate) => {
+        const currentDate = selectDate || selectedDate;
+        setSelectedDate(currentDate);
+      },
+      mode: "date",
+    });
+  };
   return (
     <View style={styles.container}>
-      <MiniCalendar setSeletedDate={setSeletedDate} />
+      <Pressable onPress={showDatePicker}>
+        <Text style={styles.text}>
+          {selectedDate.getFullYear() +
+            " - " +
+            (selectedDate.getMonth() + 1) +
+            " - " +
+            selectedDate.getDate()}
+        </Text>
+      </Pressable>
     </View>
   );
 }
 
-export default MainView;
+export default DatePicker;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "skyblue",
+    width: 200,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+  },
+  text: {
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });
 ```
 
-- `selectedDate` 캘린더에서 선택한 날짜를 담는 상태 값
-- flex
-  - 부모 컨테이너 내에서 자식 요소의 크기를 상대적인 비율로 나타내는데 사용
-  - 부모 컨테이너 안에 자식 요소가 2개가 있고 자식 요소의 flex 값이 2이면 다른 자식 요소보다 2배의 공간을 차지
-  - 1로 설정하여 부모 요소 안에서 자식 컴포넌트 끼리 균등한 공간 배분을 한다.
-  - 여기에서는 부모 요소가 화면이기 때문에 View는 화면 크기에 맞춰 배치
+- `showDatePicker` DateTimePickerAndroid 객체의 open 함수를 통해 DatePicker를 띄우는 함수
+  - value : 초기값 설정
+  - onChange : 날짜를 선택했을 때 호출할 함수 설정
+  - mode : Date, Time 모드 설정
 
-## TodoList
-
-### TodoList.js
+### ManageView.js
 
 ```jsx
-import { View, FlatList, Text, StyleSheet } from "react-native";
-import TodoItem from "./TodoItem";
+import { View, Text, StyleSheet } from "react-native";
+import DatePicker from "../components/manage/DatePicker";
+import { useState } from "react";
 
-function TodoList({ todos, selectedDate }) {
-  const renderItem = ({ item }) => {
-    return <TodoItem todo={item} selectedDate={selectedDate} />;
-  };
+function ManageView(props) {
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Today's Todo</Text>
-      <FlatList
-        data={todos}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+      <DatePicker
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
     </View>
   );
 }
 
-export default TodoList;
+export default ManageView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    margin: 10,
-  },
-  text: {
-    fontWeight: "bold",
   },
 });
 ```
 
-- FlatList
-  - data 프로퍼티에 todos를 넘겨받아 todo 항목을 목록으로 띄움
-  - renderItem 각 todo를 renderItem 함수로 컴포넌트로 변환
-  - KeyExtractor item은 todo와 같고 todo의 id를 키 값으로 설정
-- renderItem
-  - todo를 TodoItem 컴포넌트로 변환하여 return
+- `DatePicker` 컴포넌트를 추가
+- 간단한 style 적용
 
-### TodoItem.js
+### TodoForm.js
 
 ```jsx
-import { View, Text, StyleSheet } from "react-native";
-import Checkbox from "expo-checkbox";
-import IconButton from "../../components/IconButton";
+import React from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
-function TodoItem({ todo }) {
+function TodoForm({ todo, setTodo }) {
   return (
-    <View style={styles.container}>
-      <Checkbox value={todo.isChecked} onValueChange={() => {}} />
-      <Text>{todo.todo}</Text>
-      <IconButton icon="close" size={20} color="grey" onPress={() => {}} />
-    </View>
+    <TextInput style={styles.textInput} value={todo} onChangeText={setTodo} />
   );
 }
 
-export default TodoItem;
+export default TodoForm;
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    backgroundColor: "skyblue",
-    width: 300,
-    padding: 5,
-    margin: 5,
+  textInput: {
+    borderWidth: 1,
+    width: 200,
+    margin: 10,
+    padding: 10,
+    borderRadius: 8,
   },
 });
 ```
 
-- `FlatList` 의 rendering Component
-  - todo의 완료 여부 isChecked
-  - todo의 title
-- style
-  - flexDirection : 정렬축이 가로
-  - justifyContent: 정렬축으로 어떻게 자식 컴포넌트를 배치할지 결정
-    - 해당 코드에서는 자식 요소들 사이에 공간을 균등하게 분배
+- todo 내용을 입력하는 폼
 
-### MainView.js
+### ManageView.js
 
 ```jsx
-import { View, StyleSheet } from "react-native";
-import MiniCalendar from "../components/main/MiniCalendar";
-import { useState, useEffect } from "react";
-import TodoList from "../components/main/TodoList";
-import Todos from "../data/Todo";
+import { View, Text, StyleSheet, Button } from "react-native";
+import DatePicker from "../components/manage/DatePicker";
+import { useState } from "react";
+import TodoForm from "../components/manage/TodoForm";
 
-function MainView() {
-  const [selectedDate, setSeletedDate] = useState(new Date());
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    const filteredTodos = Todos.filter((todo) => {
-      return (
-        todo.date.getFullYear() === selectedDate.getFullYear() &&
-        todo.date.getMonth() === selectedDate.getMonth() &&
-        todo.date.getDate() === selectedDate.getDate()
-      );
-    });
-    setTodos(filteredTodos);
-  }, [selectedDate]);
+function ManageView(props) {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [todo, setTodo] = useState("");
 
   return (
     <View style={styles.container}>
-      <MiniCalendar setSeletedDate={setSeletedDate} />
-      <TodoList selectedDate={selectedDate} todos={todos} />
+      <DatePicker
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+      <TodoForm todo={todo} setTodo={setTodo} />
+      <Button title="add" onPress={() => {}} />
     </View>
   );
 }
 
-export default MainView;
+export default ManageView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 ```
 
-- `useEffect`
-  - `selectedDate` 의 상태가 변할 때마다 선택된 날짜의 Todos를 필터링한다.
+- `TodoForm` 을 추가
+
+### ManageView.js Todo 추가 로직
+
+```jsx
+import { View, Text, StyleSheet, Button } from "react-native";
+import DatePicker from "../components/manage/DatePicker";
+import { useState } from "react";
+import TodoForm from "../components/manage/TodoForm";
+import Todos from "../data/Todo";
+
+function ManageView({ navigation }) {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [todo, setTodo] = useState("");
+
+  return (
+    <View style={styles.container}>
+      <DatePicker
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+      <TodoForm todo={todo} setTodo={setTodo} />
+      <Button
+        title="add"
+        onPress={() => {
+          const newTodo = {
+            id: (Todos.length + 1).toString(),
+            date: selectedDate,
+            isChecked: false,
+            todo,
+          };
+          Todos.push(newTodo);
+          navigation.navigate("main");
+        }}
+      />
+    </View>
+  );
+}
+
+export default ManageView;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+```
+
+- Button을 클릭했을 때 더미 Todos 데이터 배열에 새로운 Todo를 추가하는 로직 구현
+- 다음 챕터에서 Async Storage로 데이터 저장을 구현하는 것으로 변경할 예정
+- add 버튼 클릭시 MainView로 돌아오는 로직 추가
+  - `navigation.navigate("main");`
