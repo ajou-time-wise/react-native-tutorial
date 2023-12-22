@@ -3,10 +3,12 @@ import DatePicker from "../components/manage/DatePicker";
 import { useState } from "react";
 import TodoForm from "../components/manage/TodoForm";
 import Todos from "../data/Todo";
+import { useTodoContext } from "../hooks/TodoProvider";
 
 function ManageView({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [todo, setTodo] = useState("");
+  const { addTodo } = useTodoContext();
 
   return (
     <View style={styles.container}>
@@ -18,13 +20,7 @@ function ManageView({ navigation }) {
       <Button
         title="add"
         onPress={() => {
-          const newTodo = {
-            id: (Todos.length + 1).toString(),
-            date: selectedDate,
-            isChecked: false,
-            todo,
-          };
-          Todos.push(newTodo);
+          addTodo(selectedDate.toISOString(), todo);
           navigation.navigate("main");
         }}
       />

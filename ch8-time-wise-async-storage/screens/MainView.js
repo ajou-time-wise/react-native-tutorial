@@ -3,21 +3,27 @@ import MiniCalendar from "../components/main/MiniCalendar";
 import { useState, useEffect } from "react";
 import TodoList from "../components/main/TodoList";
 import Todos from "../data/Todo";
+import { useTodoContext } from "../hooks/TodoProvider";
 
 function MainView() {
+  const { data } = useTodoContext();
   const [selectedDate, setSeletedDate] = useState(new Date());
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    const filteredTodos = Todos.filter((todo) => {
+    const filteredTodos = data.filter((todo) => {
+      const parts = todo.date.split(/[-T:.Z]/);
+      const parsedYear = parseInt(parts[0], 10);
+      const parsedMonth = parseInt(parts[1], 10) - 1;
+      const parsedDay = parseInt(parts[2], 10);
       return (
-        todo.date.getFullYear() === selectedDate.getFullYear() &&
-        todo.date.getMonth() === selectedDate.getMonth() &&
-        todo.date.getDate() === selectedDate.getDate()
+        parsedYear === selectedDate.getFullYear() &&
+        parsedMonth === selectedDate.getMonth() &&
+        parsedDay === selectedDate.getDate()
       );
     });
     setTodos(filteredTodos);
-  }, [selectedDate]);
+  }, [selectedDate, data]);
 
   return (
     <View style={styles.container}>

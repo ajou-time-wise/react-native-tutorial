@@ -1,13 +1,27 @@
 import { View, Text, StyleSheet } from "react-native";
 import Checkbox from "expo-checkbox";
 import IconButton from "../../components/IconButton";
+import { useTodoContext } from "../../hooks/TodoProvider";
 
 function TodoItem({ todo }) {
+  const { deleteTodo, toggleTodo } = useTodoContext();
   return (
     <View style={styles.container}>
-      <Checkbox value={todo.isChecked} onValueChange={() => {}} />
+      <Checkbox
+        value={todo.isChecked}
+        onValueChange={() => {
+          toggleTodo(todo.id);
+        }}
+      />
       <Text>{todo.todo}</Text>
-      <IconButton icon="close" size={20} color="grey" onPress={() => {}} />
+      <IconButton
+        icon="close"
+        size={20}
+        color="grey"
+        onPress={() => {
+          deleteTodo(todo.id);
+        }}
+      />
     </View>
   );
 }
